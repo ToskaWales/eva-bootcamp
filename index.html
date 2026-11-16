@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b6e4f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zoll-Trainer – Schriftlicher Test in 3 Tagen</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#1b2430;--mute:#5f6b7a;--line:#e3e7ec;--acc:#0b6e4f;--acc2:#e8f4ef;--bad:#b42318;--bad2:#fdecea;--warn:#a15c07;}
+@media (prefers-color-scheme:dark){:root{--bg:#12161c;--card:#1b2129;--ink:#e8edf2;--mute:#9aa6b2;--line:#2b333d;--acc:#3ccf91;--acc2:#16302a;--bad:#ff6b5e;--bad2:#3a1d1b;--warn:#f0b35a;}}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:80px}
+header{padding:18px 16px 8px;max-width:760px;margin:0 auto}
+header h1{font-size:1.25rem;margin:0}
+header p{margin:4px 0 0;color:var(--mute);font-size:.9rem}
+main{max-width:760px;margin:0 auto;padding:8px 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+h2{font-size:1.1rem;margin:0 0 8px}
+h3{font-size:1rem;margin:14px 0 6px}
+.mute{color:var(--mute);font-size:.9rem}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+nav button{flex:1;background:none;border:0;color:var(--mute);font-size:.72rem;padding:6px 2px;border-radius:8px;cursor:pointer}
+nav button .i{display:block;font-size:1.25rem}
+nav button.on{color:var(--acc);font-weight:600}
+.btn{display:inline-block;background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 16px;font-size:.95rem;font-weight:600;cursor:pointer;margin:4px 6px 4px 0}
+@media (prefers-color-scheme:dark){.btn{color:#08130f}}
+.btn.sec{background:var(--acc2);color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;text-align:left;color:var(--ink);font-size:.95rem}
+.tile b{display:block;margin-bottom:2px}
+.tile span{color:var(--mute);font-size:.8rem}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px;margin:8px 0;font-size:.97rem;color:var(--ink);cursor:pointer}
+.opt.ok{border-color:var(--acc);background:var(--acc2)}
+.opt.no{border-color:var(--bad);background:var(--bad2)}
+.q{font-size:1.02rem;white-space:pre-line}
+.law{background:var(--bg);border-left:4px solid var(--acc);padding:10px 12px;border-radius:6px;font-size:.92rem;white-space:pre-line;margin:8px 0}
+.exp{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--bg);font-size:.92rem;white-space:pre-line}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{font-size:.78rem;background:var(--acc2);color:var(--acc);padding:3px 9px;border-radius:99px;font-weight:600}
+.task{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.task input{margin-top:4px;width:20px;height:20px;accent-color:var(--acc);flex:none}
+.task.done label{color:var(--mute);text-decoration:line-through}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+td,th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+code,.f{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);padding:1px 5px;border-radius:5px;font-size:.88rem}
+textarea{width:100%;min-height:260px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:var(--card);color:var(--ink)}
+.timer{font-variant-numeric:tabular-nums;font-weight:700}
+details{border-top:1px solid var(--line);padding:8px 0}
+details summary{cursor:pointer;font-weight:600}
+ul{padding-left:20px;margin:6px 0}
+.big{font-size:2rem;font-weight:800}
+</style>
+</head>
+<body>
+<header>
+  <h1>🛃 Zoll-Trainer · gehobener Dienst</h1>
+  <p>Schriftlicher Test – von 0 auf sicher in 3 Tagen</p>
+</header>
+<main id="app"></main>
+<nav id="nav">
+  <button data-v="plan"><span class="i">📅</span>Plan</button>
+  <button data-v="learn"><span class="i">📘</span>Spickzettel</button>
+  <button data-v="train"><span class="i">🎯</span>Üben</button>
+  <button data-v="exam"><span class="i">⏱️</span>Probetest</button>
+  <button data-v="write"><span class="i">✍️</span>Aufsatz</button>
+</nav>
+<script>
+// ---------- Storage (optional) ----------
+const store={get(k,d){try{const v=localStorage.getItem('zt_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('zt_'+k,JSON.stringify(v))}catch(e){}}};
+let stats=store.get('stats',{});      // cat -> {r,t}
+let wrong=store.get('wrong',[]);      // ids of static questions answered wrong
+let done=store.get('done',{});        // plan checkboxes
+
+const $=s=>document.querySelector(s);
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const fmt=(n,d=2)=>n.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+const eur=n=>fmt(n)+' €';
+const r2=n=>Math.round(n*100)/100;
+function numOpts(ans,wrongs,f){const set=new Set([f(ans)]);const out=[f(ans)];for(const w of wrongs.concat([ans*1.1,ans*0.9,ans*1.2,ans*0.8,ans+1,ans*2])){const s=f(w);if(w>0&&!set.has(s)){set.add(s);out.push(s)}if(out.length===4)break}return out}
+
+// ---------- Mathe-Generatoren (unbegrenzt) ----------
+const GEN={
+ dreisatz(){const p=R(12,45)/10,a=R(2,9);let b=R(3,15);if(b===a)b++;const ans=r2(b*p),tot=r2(a*p);
+  return{q:`${a} kg Kaffee kosten ${eur(tot)}. Wie viel kosten ${b} kg?`,o:numOpts(ans,[tot*b/a*1.05,tot+b,b/a*tot/2],eur),e:`Dreisatz (proportional):\n1 kg = ${eur(tot)} : ${a} = ${eur(p)}\n${b} kg = ${eur(p)} · ${b} = ${eur(ans)}`}},
+ pwert(){const G=R(4,100)*20,p=pick([5,8,10,12,15,20,25,30,40,75]),W=G*p/100;
+  return{q:`Wie viel sind ${p} % von ${eur(G)}?`,o:numOpts(W,[G*p/10,G-W,W*1.5],eur),e:`Prozentwert W = G · p / 100\n= ${fmt(G,0)} · ${p} / 100 = ${eur(W)}`}},
+ gwert(){const G=R(4,80)*25,p=pick([4,5,10,15,20,25,40]),W=G*p/100;
+  return{q:`${eur(W)} entsprechen ${p} %. Wie hoch ist der Grundwert (100 %)?`,o:numOpts(G,[W*p,G*1.25,W*100/(p+5)],eur),e:`Grundwert G = W · 100 / p\n= ${fmt(W)} · 100 / ${p} = ${eur(G)}`}},
+ psatz(){const G=pick([80,120,200,250,400,500,800,1200]),p=pick([5,10,12.5,15,20,25,30,35,40,60]),W=G*p/100;
+  return{q:`Ein Händler gibt auf ${eur(G)} einen Rabatt von ${eur(W)}. Wie viel Prozent sind das?`,o:numOpts(p,[p*2,p+5,100-p],x=>fmt(x,1)+' %'),e:`Prozentsatz p = W · 100 / G\n= ${fmt(W)} · 100 / ${fmt(G,0)} = ${fmt(p,1)} %`}},
+ zins(){const K=R(2,40)*500,p=pick([1,1.5,2,2.5,3,4,5,6]),t=pick([30,60,90,120,180,240,270]),Z=r2(K*p*t/36000);
+  return{q:`Wie viel Zinsen bringen ${eur(K)} bei ${fmt(p,1)} % Jahreszins in ${t} Tagen?\n(Bankjahr = 360 Tage)`,o:numOpts(Z,[K*p/100,K*p*t/36500,Z*12/ (t/30) /12*2],eur),e:`Tageszinsen: Z = K · p · t / (100 · 360)\n= ${fmt(K,0)} · ${fmt(p,1)} · ${t} / 36.000 = ${eur(Z)}`}},
+ zinsJahre(){const K=R(2,30)*1000,p=pick([2,3,4,5]),n=R(2,5),Z=K*p*n/100;
+  return{q:`${eur(K)} werden ${n} Jahre zu ${p} % angelegt (einfache Zinsen, ohne Zinseszins). Wie hoch sind die Zinsen insgesamt?`,o:numOpts(Z,[K*p/100,K*(Math.pow(1+p/100,n)-1)+50,Z+K*p/100],eur),e:`Z = K · p · n / 100\n= ${fmt(K,0)} · ${p} · ${n} / 100 = ${eur(Z)}`}},
+ rabattMwst(){const N=R(4,60)*10,r=pick([10,15,20,25]),net=N*(1-r/100),br=r2(net*1.19);
+  return{q:`Ein Gerät kostet netto ${eur(N)}. Es gibt ${r} % Rabatt, danach kommen 19 % MwSt. dazu. Endpreis?`,o:numOpts(br,[N*1.19-N*r/100,N*(1+0.19-r/100),net],eur),e:`Erst Rabatt: ${fmt(N,0)} · ${fmt(1-r/100,2)} = ${eur(net)}\nDann MwSt: ${eur(net)} · 1,19 = ${eur(br)}\nMerke: Faktoren multiplizieren, Prozente nicht einfach addieren!`}},
+ einfuhr(){const W=R(4,50)*100,z=pick([2,4,5,8,10,12]),Zoll=W*z/100,E=r2((W+Zoll)*0.19),T=r2(Zoll+E);
+  return{q:`Eine Ware mit Zollwert ${eur(W)} wird eingeführt. Zollsatz ${z} %, Einfuhrumsatzsteuer 19 % auf (Zollwert + Zoll). Wie hoch sind die Einfuhrabgaben insgesamt (Zoll + EUSt)?\n(vereinfachtes Beispiel)`,o:numOpts(T,[W*(z+19)/100,Zoll+W*0.19+5,W*0.19],eur),e:`Zoll = ${fmt(W,0)} · ${z} % = ${eur(Zoll)}\nEUSt-Bemessung = ${eur(W)} + ${eur(Zoll)} = ${eur(W+Zoll)}\nEUSt = · 19 % = ${eur(E)}\nGesamt = ${eur(T)}`}},
+ schnitt(){const a=Array.from({length:5},()=>R(10,99));const s=a.reduce((x,y)=>x+y,0),m=s/5;
+  return{q:`Berechne den Durchschnitt: ${a.join(' · ').replace(/ · /g,', ')}`,o:numOpts(m,[s/4,m+2,m-1.5],x=>fmt(x,1)),e:`Summe = ${s}, Anzahl = 5\nØ = ${s} : 5 = ${fmt(m,1)}`}},
+ reihe(){const t=R(0,3);let a=[],n,e;
+  if(t===0){const s=R(2,20),d=R(3,12);a=[0,1,2,3,4].map(i=>s+i*d);n=s+5*d;e=`Immer +${d}`}
+  else if(t===1){const s=R(1,5),f=pick([2,3]);a=[0,1,2,3,4].map(i=>s*Math.pow(f,i));n=s*Math.pow(f,5);e=`Immer ·${f}`}
+  else if(t===2){const s=R(2,10),x=R(2,6),y=R(1,4);let v=s;a=[v];for(let i=1;i<6;i++){v=i%2?v+x:v-y;a.push(v)}n=a.pop();e=`Abwechselnd +${x} und −${y}`}
+  else{let v=R(1,6),d=R(1,3);a=[v];for(let i=1;i<5;i++){v+=d;d++;a.push(v)}n=v+d;e=`Die Abstände wachsen um 1 (+${d-4}, +${d-3}, …, +${d})`}
+  const f=x=>String(x);const o=[f(n)];for(const w of [n+1,n-1,n+2,n*2,n-3])if(w>0&&!o.includes(f(w))&&o.length<4)o.push(f(w));
+  return{q:`Wie geht die Zahlenreihe weiter?\n${a.join('  ')}  ?`,o,e}}
+};
+GEN.anti=function(){const a=pick([2,3,4,5,6]),b=pick([3,4,6,8,9,10,12].filter(x=>x!==a)),m=R(1,4),t=b*m,res=a*m;
+ return{q:`${a} Beamte brauchen für die Kontrolle einer Lieferung ${t} Stunden. Wie lange brauchen ${b} Beamte bei gleichem Tempo?`,o:numOpts(res,[t*b/a,t+(b-a),res+1],x=>fmt(x,1)+' h'),e:`Antiproportional (mehr Leute → weniger Zeit):\nGesamtarbeit = ${a} · ${t} = ${a*t} Personenstunden\n${a*t} : ${b} = ${fmt(res,1)} h`}};
+
+// ---------- Statische Fragen ----------
+// o[0] ist immer richtig (wird gemischt)
+const SPRACHE=[
+ {q:'Welcher Satz ist richtig?',o:['Ich hoffe, dass du pünktlich bist.','Ich hoffe, das du pünktlich bist.','Ich hoffe dass, du pünktlich bist.'],e:'„dass“ leitet einen Nebensatz ein. Test: Lässt sich „dieses/welches“ einsetzen? Dann „das“, sonst „dass“.'},
+ {q:'Das Auto, ___ vor der Tür steht, gehört dem Zoll.',o:['das','dass','was'],e:'Relativpronomen → „das“ (= welches).'},
+ {q:'Ihr ___ heute zu spät gekommen.',o:['seid','seit'],e:'„seid“ = Verb (sein, ihr seid). „seit“ = Zeit (seit gestern).'},
+ {q:'Der Bürger hat dem Bescheid ___sprochen.',o:['wider','wieder'],e:'„wider“ = gegen (widersprechen, Widerstand). „wieder“ = erneut.'},
+ {q:'Welche Schreibweise ist richtig?',o:['Standard','Standart','Standarth'],e:'Standard mit d am Ende (nicht zu verwechseln mit der Standarte).'},
+ {q:'Welche Schreibweise ist richtig?',o:['endgültig','entgültig','endgültich'],e:'Von „Ende“ → end-gültig.'},
+ {q:'Welche Schreibweise ist richtig?',o:['nämlich','nähmlich','nämmlich'],e:'Merksatz: „Wer nämlich mit h schreibt, ist dämlich.“'},
+ {q:'Welche Schreibweise ist richtig?',o:['Rhythmus','Rythmus','Rhytmus'],e:'R-h-y-t-h-m-u-s – zwei h.'},
+ {q:'Welche Schreibweise ist richtig?',o:['Reparatur','Reperatur','Repparatur'],e:'Von lat. reparare → Reparatur.'},
+ {q:'Welche Schreibweise ist richtig?',o:['Maschine','Maschiene','Machine'],e:'Maschine ohne ie.'},
+ {q:'Welche Schreibweise ist richtig?',o:['tolerant','tollerant','tolerannt'],e:'Ein l, ein n.'},
+ {q:'Welche Schreibweise ist richtig?',o:['Lizenz','Lizens','Litzenz'],e:'Lizenz mit z am Ende.'},
+ {q:'Welche Schreibweise ist richtig?',o:['Entschädigung','Endschädigung','Entschätigung'],e:'Vorsilbe „ent-“ (= weg von), nicht „end“.'},
+ {q:'Was ist richtig geschrieben?',o:['beim Lesen','beim lesen','Beim lesen'],e:'Nominalisierung: Nach „beim“ (bei dem) wird das Verb groß.'},
+ {q:'Was ist richtig geschrieben?',o:['etwas Neues','etwas neues','Etwas neues'],e:'Nach „etwas, nichts, viel, alles“ wird das Adjektiv großgeschrieben.'},
+ {q:'Was ist richtig geschrieben?',o:['am besten','am Besten','Am besten'],e:'Superlativ mit „am“ wird kleingeschrieben: am besten, am schnellsten.'},
+ {q:'Was ist richtig geschrieben?',o:['im Allgemeinen','im allgemeinen','Im allgemeinen'],e:'Seit der Reform: im Allgemeinen (groß).'},
+ {q:'Wo fehlt ein Komma?',o:['Der Beamte, der die Kontrolle durchführte, war freundlich.','Der Beamte der die Kontrolle durchführte, war freundlich.','Der Beamte, der die Kontrolle durchführte war freundlich.'],e:'Relativsätze werden vorne UND hinten durch Kommas abgetrennt.'},
+ {q:'Welcher Satz ist korrekt?',o:['Weil es regnete, blieb er zu Hause.','Weil es regnete blieb er zu Hause.','Weil, es regnete blieb er zu Hause.'],e:'Nebensatz (weil, dass, obwohl, wenn …) wird immer mit Komma abgetrennt.'},
+ {q:'Welcher Satz ist korrekt?',o:['Wegen des schlechten Wetters fiel die Kontrolle aus.','Wegen dem schlechten Wetter fiel die Kontrolle aus.','Wegen das schlechte Wetter fiel die Kontrolle aus.'],e:'Standardsprache: „wegen“ + Genitiv (des Wetters). Gilt auch für trotz, während, aufgrund.'},
+ {q:'Welcher Satz ist korrekt?',o:['Er ist größer als sein Bruder.','Er ist größer wie sein Bruder.','Er ist größer als wie sein Bruder.'],e:'Vergleich bei Ungleichheit: „als“. Bei Gleichheit: „so groß wie“.'},
+ {q:'Welcher Satz ist korrekt?',o:['Wenn ich Zeit hätte, würde ich kommen.','Wenn ich Zeit hätte, würde ich gekommen.','Wenn ich Zeit würde haben, käme ich.'],e:'Konjunktiv II: hätte / würde + Infinitiv.'},
+ {q:'Welcher Satz ist korrekt?',o:['Die Akten wurden gestern geprüft.','Die Akten wurde gestern geprüft.','Die Akten worden gestern geprüft.'],e:'Plural-Subjekt → „wurden“.'},
+ {q:'Welcher Satz ist korrekt?',o:['Er fragte, ob ich morgen Zeit habe.','Er fragte, ob ich morgen Zeit habe?','Er fragte ob ich morgen Zeit habe.'],e:'Indirekte Frage → Komma, aber kein Fragezeichen.'},
+ {q:'„evident“ bedeutet …',o:['offensichtlich','zweifelhaft','unwichtig','verborgen'],e:'evident = klar erkennbar, offensichtlich.'},
+ {q:'„obsolet“ bedeutet …',o:['überholt, veraltet','verpflichtend','geheim','dringend'],e:''},
+ {q:'„plausibel“ bedeutet …',o:['einleuchtend, nachvollziehbar','falsch','teuer','vorläufig'],e:''},
+ {q:'„Konsens“ bedeutet …',o:['Übereinstimmung','Streit','Vertrag','Mehrheit'],e:''},
+ {q:'„ambivalent“ bedeutet …',o:['zwiespältig','eindeutig','langweilig','zweisprachig'],e:''},
+ {q:'„Prämisse“ bedeutet …',o:['Voraussetzung','Belohnung','Ergebnis','Erlaubnis'],e:''},
+ {q:'„konstatieren“ bedeutet …',o:['feststellen','widersprechen','bauen','verzögern'],e:''},
+ {q:'„Sanktion“ bedeutet hier …',o:['Strafmaßnahme','Belobigung','Gesetzentwurf','Untersuchung'],e:'Im Alltag/Recht meist: Zwangs- oder Strafmaßnahme.'},
+ {q:'„pragmatisch“ bedeutet …',o:['praxisorientiert, sachbezogen','theoretisch','unhöflich','übertrieben'],e:''},
+ {q:'„Implikation“ bedeutet …',o:['Folgerung, Mitbedeutung','Einfuhr','Ausnahme','Beschwerde'],e:''},
+ {q:'„subsidiär“ bedeutet …',o:['nachrangig, unterstützend','vorrangig','verboten','geheim'],e:'Subsidiaritätsprinzip: Die höhere Ebene greift nur ein, wenn die niedrigere es nicht schafft.'},
+ {q:'Gegenteil von „restriktiv“?',o:['großzügig','streng','begrenzt','eng'],e:'restriktiv = einschränkend.'},
+ {q:'Gegenteil von „explizit“?',o:['implizit','ausdrücklich','deutlich','extern'],e:'explizit = ausdrücklich; implizit = unausgesprochen mitgemeint.'},
+ {q:'Analogie: Hand : Handschuh = Fuß : ?',o:['Socke','Bein','Zeh','Laufen'],e:'Körperteil : Bekleidung dafür.'},
+ {q:'Analogie: Messer : schneiden = Waage : ?',o:['wiegen','Gewicht','Kilo','Küche'],e:'Werkzeug : Tätigkeit.'},
+ {q:'Welches Wort passt nicht?',o:['Hafen','Euro','Dollar','Yen'],e:'Alle anderen sind Währungen.'},
+];
+
+const RECHT=[
+ {law:'§ 1 FiktVO (fiktiv)\nReisende dürfen Waren bis zu einem Gesamtwert von 400 Euro abgabenfrei einführen, sofern die Waren nicht zum Handel bestimmt sind.',q:'A bringt drei Uhren für sich selbst mit, jede kostet 120 €. Muss A Abgaben zahlen?',o:['Nein – Gesamtwert 360 € ≤ 400 €, privat','Ja – jede Uhr einzeln zählt doppelt','Ja – mehr als zwei gleiche Waren sind immer Handel'],e:'Prüfschema: 1) Gesamtwert? 3 × 120 = 360 € ≤ 400 € ✔ 2) Nicht zum Handel ✔ → abgabenfrei.'},
+ {law:'§ 1 FiktVO (fiktiv)\nReisende dürfen Waren bis zu einem Gesamtwert von 400 Euro abgabenfrei einführen, sofern die Waren nicht zum Handel bestimmt sind.',q:'B bringt Waren für 350 € mit, die er in seinem Laden verkaufen will. Abgabenfrei?',o:['Nein – die Waren sind zum Handel bestimmt','Ja – unter 400 €','Ja – Händler sind immer befreit'],e:'BEIDE Voraussetzungen müssen erfüllt sein („sofern“ = Bedingung). Handel → keine Befreiung, egal wie günstig.'},
+ {law:'§ 2 FiktVO (fiktiv)\n(1) Gegen einen Bescheid kann innerhalb eines Monats nach Bekanntgabe Einspruch eingelegt werden.\n(2) Ein per Post übermittelter Bescheid gilt am vierten Tag nach der Aufgabe zur Post als bekanntgegeben.\n(Wochenenden und Feiertage bleiben in dieser Aufgabe unberücksichtigt.)',q:'Der Bescheid wird am 2. März zur Post gegeben. Wann endet die Einspruchsfrist?',o:['6. April','2. April','6. März','30. März'],e:'Schritt 1: Bekanntgabe = 2. März + 4 Tage = 6. März.\nSchritt 2: + 1 Monat → 6. April.\nTypischer Fehler: Frist ab Postaufgabe statt ab Bekanntgabe rechnen.'},
+ {law:'§ 3 FiktVO (fiktiv)\nEine Lagererlaubnis wird erteilt, wenn der Antragsteller volljährig ist und in den letzten fünf Jahren keine Steuerstraftat begangen hat.',q:'C ist 17 Jahre alt und nicht vorbestraft. Bekommt C die Erlaubnis?',o:['Nein – C ist nicht volljährig','Ja – keine Steuerstraftat','Ja – die Behörde kann eine Ausnahme machen'],e:'„und“ = kumulativ: alle Bedingungen müssen vorliegen. Volljährigkeit fehlt → keine Erlaubnis.'},
+ {law:'§ 4 FiktVO (fiktiv)\nEin Bußgeld kann festgesetzt werden, wenn Waren nicht angemeldet oder falsch bezeichnet werden.',q:'D hat Waren falsch bezeichnet. MUSS die Behörde ein Bußgeld festsetzen?',o:['Nein – „kann“ bedeutet Ermessen','Ja – der Tatbestand ist erfüllt','Nein – nur bei Nicht-Anmeldung'],e:'„oder“ = eine Alternative reicht → Tatbestand erfüllt.\nAber: „kann“ = Ermessen. „muss/ist“ = Pflicht. „soll“ = Regelfall, Ausnahme nur in atypischen Fällen.'},
+ {law:'§ 5 FiktVO (fiktiv)\n(1) Hunde müssen bei der Einreise mit einem Mikrochip gekennzeichnet sein.\n(2) Absatz 1 gilt nicht für Hunde unter zwölf Wochen, die unmittelbar aus einem EU-Mitgliedstaat eingeführt werden.',q:'E reist mit einem 10 Wochen alten, nicht gechipten Welpen direkt aus der Schweiz ein. Zulässig?',o:['Nein – die Schweiz ist kein EU-Mitgliedstaat','Ja – der Hund ist unter 12 Wochen','Ja – die Schweiz liegt in Europa'],e:'Ausnahme (Abs. 2) braucht beide Merkmale: < 12 Wochen ✔ UND aus EU-Staat ✘ → Ausnahme greift nicht → Regel (Abs. 1) gilt.'},
+ {law:'§ 6 FiktVO (fiktiv)\n(1) Alkoholerzeugnisse im Sinne dieser Verordnung sind Getränke mit mehr als 1,2 % vol. Alkohol.\n(2) Je Person dürfen höchstens 10 Liter Alkoholerzeugnisse eingeführt werden.\n(3) Personen unter 17 Jahren dürfen keine Alkoholerzeugnisse einführen.',q:'F (16) führt 3 Liter alkoholfreies Bier (0,5 % vol.) ein. Verstoß?',o:['Nein – 0,5 % vol. ist kein Alkoholerzeugnis i. S. d. Verordnung','Ja – F ist unter 17','Ja – Bier ist immer Alkohol'],e:'Immer zuerst die Legaldefinition prüfen! 0,5 % ≤ 1,2 % → kein Alkoholerzeugnis → Abs. 3 ist gar nicht anwendbar.'},
+ {law:'§ 6 Abs. 2 FiktVO: Je Person höchstens 10 Liter Alkoholerzeugnisse.\n§ 7 FiktVO (fiktiv): Wer gegen § 6 Abs. 2 verstößt, zahlt für jeden angefangenen Liter über der Höchstmenge 20 Euro.',q:'G (30) führt 12,5 Liter Wein ein. Wie viel muss G zahlen?',o:['60 €','50 €','40 €','250 €'],e:'Überschreitung = 2,5 l. „angefangener Liter“ → aufrunden auf 3. 3 × 20 € = 60 €.'},
+ {law:'§ 8 FiktVO (fiktiv)\nWer zur Anzeige verpflichtet ist, hat diese unverzüglich zu erstatten.',q:'Was bedeutet „unverzüglich“ im Rechtssinn?',o:['ohne schuldhaftes Zögern','sofort, innerhalb einer Stunde','innerhalb von 14 Tagen','sobald es passt'],e:'Klassische Legaldefinition (§ 121 BGB): unverzüglich = ohne schuldhaftes Zögern.'},
+ {law:'§ 9 FiktVO (fiktiv)\n(1) Für Kaffee wird eine Abgabe von 2 Euro je Kilogramm erhoben.\n(2) Für Röstkaffee in Fertigpackungen bis 500 g beträgt die Abgabe abweichend von Absatz 1 1,50 Euro je Packung.',q:'H führt 4 Packungen Röstkaffee à 500 g ein. Abgabe?',o:['6,00 €','4,00 €','8,00 €','3,00 €'],e:'Spezielle Regel (Abs. 2) geht der allgemeinen (Abs. 1) vor („lex specialis“). 4 × 1,50 € = 6 €.'},
+ {law:'§ 10 FiktVO (fiktiv)\nDie Erlaubnis soll widerrufen werden, wenn der Inhaber gegen Auflagen verstößt.',q:'Was bedeutet „soll“ hier?',o:['Im Regelfall muss widerrufen werden, nur in atypischen Ausnahmefällen nicht','Die Behörde darf frei entscheiden','Ein Widerruf ist verboten','Nur ein Gericht entscheidet'],e:'muss > soll > kann. „Soll“ = gebundenes Ermessen.'},
+ {law:'§ 11 FiktVO (fiktiv)\nPersonen, die ihren Wohnsitz in einer Grenzzone haben, dürfen bei Einreise höchstens 100 Euro abgabenfrei mitführen. Im Übrigen gilt § 1.',q:'I wohnt in der Grenzzone und bringt privat Waren für 250 € mit. Abgabenfrei?',o:['Nein – für I gilt die Grenze von 100 €','Ja – § 1 erlaubt 400 €','Ja – private Waren sind immer frei'],e:'„Im Übrigen gilt § 1“ = § 1 nur für Fälle, die § 11 nicht regelt. Für Grenzzonenbewohner ist § 11 spezieller.'},
+];
+
+const TEXTE=[
+ {t:'Text A: Schwarzarbeit\nDie Finanzkontrolle Schwarzarbeit (FKS) ist eine Arbeitseinheit des Zolls. Sie prüft unter anderem, ob Arbeitgeber Sozialversicherungsbeiträge abführen und gesetzliche Mindestlöhne zahlen. Schwarzarbeit schadet nicht nur den Sozialkassen, sondern verzerrt auch den Wettbewerb: Ehrliche Unternehmen können mit Anbietern, die Abgaben hinterziehen, preislich kaum mithalten. Kritiker bemängeln, dass Kontrollen häufig Kleinbetriebe treffen, während komplexe Subunternehmerketten schwer zu durchschauen sind. Befürworter halten dagegen, dass gerade sichtbare Kontrollen eine abschreckende Wirkung entfalten.',
+  qs:[
+  {q:'Welche Aussage wird durch Text A gestützt?',o:['Schwarzarbeit benachteiligt ehrliche Unternehmen im Wettbewerb.','Die FKS gehört zur Polizei.','Kontrollen haben laut allen Seiten keine Wirkung.','Kleinbetriebe werden nie kontrolliert.'],e:'Satz 3 – Wettbewerbsverzerrung.'},
+  {q:'Was kritisieren Kritiker laut Text A?',o:['Kontrollen treffen oft Kleinbetriebe, komplexe Ketten bleiben schwer durchschaubar.','Die FKS kontrolliere zu selten Mindestlöhne.','Die Sozialkassen hätten zu viel Geld.','Abschreckung sei verboten.'],e:'Satz 4.'},
+  {q:'Welches Argument nennen Befürworter?',o:['Abschreckende Wirkung sichtbarer Kontrollen','Höhere Steuersätze','Abschaffung des Mindestlohns','Weniger Kontrollen bei großen Firmen'],e:'Letzter Satz.'}]},
+ {t:'Text B: Digitale Zollabfertigung\nSeit Jahren setzt die Zollverwaltung auf elektronische Verfahren. Zollanmeldungen werden überwiegend digital übermittelt, was Bearbeitungszeiten verkürzen kann. Allerdings entstehen neue Anforderungen: Unternehmen müssen ihre IT-Systeme anpassen, und Fehler in Stammdaten können ganze Sendungen verzögern. Experten betonen, dass die Digitalisierung die Kontrolle nicht ersetzt, sondern sie gezielter macht – etwa durch Risikoanalysen, die auffällige Sendungen herausfiltern.',
+  qs:[
+  {q:'Was ist laut Text B die Rolle der Digitalisierung bei Kontrollen?',o:['Sie macht Kontrollen gezielter, ersetzt sie aber nicht.','Sie ersetzt Kontrollen vollständig.','Sie verhindert Risikoanalysen.','Sie gilt nur für Privatpersonen.'],e:'Letzter Satz.'},
+  {q:'Welcher Nachteil wird genannt?',o:['Fehler in Stammdaten können Sendungen verzögern.','Anmeldungen müssen auf Papier erfolgen.','Bearbeitungszeiten werden immer länger.','Risikoanalysen sind verboten.'],e:'Satz 3.'},
+  {q:'Welche Aussage lässt sich aus Text B NICHT ableiten?',o:['Alle Zollanmeldungen werden ausschließlich digital übermittelt.','Unternehmen müssen IT anpassen.','Digitale Verfahren können Zeit sparen.','Risikoanalysen filtern auffällige Sendungen.'],e:'Text sagt „überwiegend“, nicht „ausschließlich“. Auf solche Signalwörter achten!'}]}
+];
+
+const WISSEN=[
+ {q:'Zu welchem Bundesministerium gehört der Zoll?',o:['Bundesministerium der Finanzen','Bundesministerium des Innern','Bundesministerium der Justiz','Auswärtiges Amt'],e:''},
+ {q:'Wo hat die Generalzolldirektion ihren Sitz?',o:['Bonn','Berlin','Frankfurt am Main','Hamburg'],e:''},
+ {q:'Wofür steht „FKS“ beim Zoll?',o:['Finanzkontrolle Schwarzarbeit','Fahndung Kriminalität und Schmuggel','Freihandels-Kontroll-System','Finanz- und Kassenstelle'],e:''},
+ {q:'Welche dieser Steuern wird vom Zoll verwaltet?',o:['Energiesteuer','Einkommensteuer','Grundsteuer','Gewerbesteuer'],e:'Zoll = Bundesfinanzverwaltung: u. a. Energie-, Strom-, Tabak-, Alkohol-, Kaffee-, Kfz-Steuer, Einfuhrumsatzsteuer.'},
+ {q:'Welche Steuer verwaltet seit 2014 der Zoll (vorher die Länder)?',o:['Kraftfahrzeugsteuer','Erbschaftsteuer','Hundesteuer','Lohnsteuer'],e:''},
+ {q:'Wie heißt die Steuer, die bei Einfuhr aus Nicht-EU-Ländern statt der normalen USt anfällt?',o:['Einfuhrumsatzsteuer','Importsteuer','Grenzsteuer','Verbrauchszoll'],e:''},
+ {q:'Wem stehen die Zolleinnahmen (Zölle) in der EU grundsätzlich zu?',o:['Der EU (Eigenmittel)','Den Bundesländern','Den Gemeinden','Den Hauptzollämtern'],e:'Zölle sind traditionelle Eigenmittel der EU; Mitgliedstaaten behalten einen Teil für die Erhebungskosten.'},
+ {q:'Wie heißt das zentrale Zollrecht der EU?',o:['Zollkodex der Union (UZK)','Abgabenordnung','Zollverwaltungsgesetz','Schengener Abkommen'],e:''},
+ {q:'Regelsatz der Umsatzsteuer in Deutschland?',o:['19 %','16 %','7 %','21 %'],e:'Ermäßigt: 7 %.'},
+ {q:'Wann trat das Grundgesetz in Kraft?',o:['1949','1945','1955','1990'],e:'Verkündet am 23. Mai 1949, in Kraft am 24. Mai 1949.'},
+ {q:'Was steht in Artikel 1 Grundgesetz?',o:['Die Würde des Menschen ist unantastbar.','Alle Menschen sind vor dem Gesetz gleich.','Die Bundesrepublik ist ein Bundesstaat.','Meinungsfreiheit'],e:''},
+ {q:'Wer wählt den Bundeskanzler / die Bundeskanzlerin?',o:['Der Bundestag','Das Volk direkt','Der Bundesrat','Die Bundesversammlung'],e:'Auf Vorschlag des Bundespräsidenten (Art. 63 GG).'},
+ {q:'Wer wählt den Bundespräsidenten?',o:['Die Bundesversammlung','Der Bundestag','Das Volk','Der Bundesrat'],e:'Amtszeit 5 Jahre, einmalige Wiederwahl möglich.'},
+ {q:'Wie viele Bundesländer hat Deutschland?',o:['16','15','17','12'],e:''},
+ {q:'Über welches Organ wirken die Länder an der Gesetzgebung des Bundes mit?',o:['Bundesrat','Bundestag','Bundesverfassungsgericht','Bundesversammlung'],e:''},
+ {q:'Wo sitzt das Bundesverfassungsgericht?',o:['Karlsruhe','Berlin','Leipzig','Bonn'],e:''},
+ {q:'Wo sitzt der Bundesfinanzhof?',o:['München','Karlsruhe','Kassel','Erfurt'],e:'Oberstes Gericht für Steuer- und Zollsachen.'},
+ {q:'Was bedeutet „Gewaltenteilung“?',o:['Trennung von Legislative, Exekutive und Judikative','Trennung von Bund und Gemeinden','Aufteilung der Polizei','Trennung von Kirche und Staat'],e:'Der Zoll gehört zur Exekutive (Verwaltung).'},
+ {q:'Was ist das „konstruktive Misstrauensvotum“?',o:['Der Bundestag kann den Kanzler nur abwählen, indem er gleichzeitig einen Nachfolger wählt.','Der Bundesrat entlässt einen Minister.','Das Volk stimmt über die Regierung ab.','Der Bundespräsident löst den Bundestag auf.'],e:'Art. 67 GG.'},
+ {q:'Wofür ist bei der Bundestagswahl die Zweitstimme maßgeblich?',o:['Für die Sitzverteilung der Parteien','Für den Direktkandidaten','Für den Bundespräsidenten','Für den Bundesrat'],e:''},
+ {q:'Für wie viele Jahre wird der Bundestag gewählt?',o:['4','5','6','3'],e:''},
+ {q:'Seit wann ist der Euro als Bargeld im Umlauf?',o:['2002','1999','1990','2008'],e:'Buchgeld seit 1999, Bargeld seit 1.1.2002.'},
+ {q:'Wie viele Mitgliedstaaten hat die EU (Stand 2026)?',o:['27','28','25','30'],e:'Seit dem Brexit 2020: 27.'},
+ {q:'Wo hat die Europäische Zentralbank ihren Sitz?',o:['Frankfurt am Main','Brüssel','Straßburg','Luxemburg'],e:''},
+ {q:'Was ist der Kern einer Zollunion?',o:['Keine Binnenzölle und ein gemeinsamer Außenzoll','Gemeinsame Währung','Gemeinsame Armee','Keine Passkontrollen'],e:'Keine Passkontrollen = Schengen, nicht Zollunion.'},
+ {q:'Tag der Deutschen Einheit?',o:['3. Oktober 1990','9. November 1989','17. Juni 1953','1. Mai 1990'],e:'9.11.1989 = Mauerfall.'},
+ {q:'Höchster Berg Deutschlands?',o:['Zugspitze','Watzmann','Brocken','Feldberg'],e:'2.962 m.'},
+ {q:'Welches Bundesland hat die meisten Einwohner?',o:['Nordrhein-Westfalen','Bayern','Baden-Württemberg','Niedersachsen'],e:''},
+ {q:'Hauptstadt von Sachsen?',o:['Dresden','Leipzig','Chemnitz','Magdeburg'],e:''},
+ {q:'Hauptstadt von Rheinland-Pfalz?',o:['Mainz','Koblenz','Trier','Wiesbaden'],e:'Wiesbaden = Hessen.'},
+ {q:'Was ist „Inflation“?',o:['Allgemeiner Anstieg des Preisniveaus','Sinken der Preise','Steigende Zinsen','Wachstum des BIP'],e:''},
+ {q:'Was sind „Verbrauchsteuern“?',o:['Steuern auf den Verbrauch bestimmter Waren (z. B. Tabak, Energie)','Steuern auf Einkommen','Steuern auf Grundstücke','Gebühren für Ämter'],e:''},
+ {q:'Was ist ein „Embargo“?',o:['Handelsverbot gegenüber einem Staat','Zollfreie Zone','Einfuhrkontingent für Lebensmittel','Freihandelsabkommen'],e:''},
+ {q:'Wie heißt das Abkommen über den Schutz gefährdeter Tier- und Pflanzenarten, das der Zoll kontrolliert?',o:['Washingtoner Artenschutzübereinkommen (CITES)','Kyoto-Protokoll','Genfer Konvention','Pariser Abkommen'],e:''},
+ {q:'Welches chemische Symbol hat Gold?',o:['Au','Ag','Go','Gd'],e:'Ag = Silber.'},
+];
+
+// IDs vergeben
+const BANK={};
+SPRACHE.forEach((x,i)=>{x.id='s'+i;x.cat='Sprache';BANK[x.id]=x});
+RECHT.forEach((x,i)=>{x.id='r'+i;x.cat='Rechtsfälle';BANK[x.id]=x});
+WISSEN.forEach((x,i)=>{x.id='w'+i;x.cat='Allgemeinwissen';BANK[x.id]=x});
+TEXTE.forEach((T,ti)=>T.qs.forEach((x,i)=>{x.id='t'+ti+'_'+i;x.cat='Textanalyse';x.text=T.t;BANK[x.id]=x}));
+
+const MATHKEYS={dreisatz:'Dreisatz',anti:'Dreisatz (umgekehrt)',pwert:'Prozentwert',gwert:'Grundwert',psatz:'Prozentsatz',zins:'Zinsen (Tage)',zinsJahre:'Zinsen (Jahre)',rabattMwst:'Rabatt + MwSt',einfuhr:'Einfuhrabgaben',schnitt:'Durchschnitt',reihe:'Zahlenreihen'};
+function mathQ(key){key=key||pick(Object.keys(MATHKEYS));const g=GEN[key]();return{q:g.q,opts:g.o,correct:g.o[0],e:g.e,cat:'Mathe',sub:MATHKEYS[key]}}
+function staticQ(x){return{q:x.q,opts:x.o,correct:x.o[0],e:x.e,cat:x.cat,law:x.law,text:x.text,id:x.id}}
+
+// ---------- Quiz-Engine ----------
+let Q=null; // {list:[], i, right, mode, timer, end, perCat}
+function startQuiz(list,opts={}){Q={list,i:0,right:0,answered:false,perCat:{},title:opts.title||'Üben',endless:opts.endless,gen:opts.gen,exam:opts.exam,end:opts.minutes?Date.now()+opts.minutes*60000:null,missed:[]};
+ if(Q.end){clearInterval(window._tm);window._tm=setInterval(()=>{const el=$('#tm');if(!Q||!Q.end){clearInterval(window._tm);return}const s=Math.max(0,Math.round((Q.end-Date.now())/1000));if(el)el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');if(s<=0){clearInterval(window._tm);finish()}},500)}
+ renderQ()}
+function cur(){if(Q.endless&&Q.i>=Q.list.length)Q.list.push(Q.gen());return Q.list[Q.i]}
+function renderQ(){const x=cur();if(!x){finish();return}
+ if(!x._sh){x._sh=shuffle(x.opts)}
+ const total=Q.endless?'∞':Q.list.length;
+ $('#app').innerHTML=`<div class="card"><div class="row"><span class="pill">${x.cat}${x.sub?' · '+x.sub:''}</span><span class="mute">${Q.i+1} / ${total} · ✔ ${Q.right}${Q.end?' · ⏱ <span id="tm" class="timer">…</span>':''}</span></div>
+ ${Q.endless?'':`<div class="bar" style="margin:10px 0"><i style="width:${(Q.i/Q.list.length)*100}%"></i></div>`}
+ ${x.text?`<details ${Q.exam?'':'open'}><summary>Text anzeigen</summary><div class="law">${x.text}</div></details>`:''}
+ ${x.law?`<div class="law">${x.law}</div>`:''}
+ <p class="q"><b>${x.q}</b></p><div id="opts">${x._sh.map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')}</div><div id="fb"></div>
+ <div style="margin-top:8px"><button class="btn sec" onclick="quit()">Beenden</button></div></div>`;
+ document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.k))}
+function answer(k){if(Q.answered)return;Q.answered=true;const x=cur(),pickd=x._sh[k],ok=pickd===x.correct;
+ const c=x.cat;Q.perCat[c]=Q.perCat[c]||{r:0,t:0};Q.perCat[c].t++;stats[c]=stats[c]||{r:0,t:0};stats[c].t++;
+ if(ok){Q.right++;Q.perCat[c].r++;stats[c].r++;if(x.id)wrong=wrong.filter(w=>w!==x.id)}else{if(x.id&&!wrong.includes(x.id))wrong.push(x.id);Q.missed.push(x)}
+ store.set('stats',stats);store.set('wrong',wrong);
+ document.querySelectorAll('.opt').forEach((b,i)=>{if(x._sh[i]===x.correct)b.classList.add('ok');else if(i===k)b.classList.add('no');b.disabled=true});
+ if(Q.exam){setTimeout(next,450);return}
+ $('#fb').innerHTML=`<div class="exp"><b>${ok?'✅ Richtig':'❌ Falsch – richtig: '+x.correct}</b>${x.e?'\n'+x.e:''}</div><button class="btn" style="margin-top:10px" onclick="next()">Weiter →</button>`;
+ $('#fb').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function next(){Q.i++;Q.answered=false;if(!Q.endless&&Q.i>=Q.list.length)finish();else renderQ()}
+function quit(){if(Q&&Q.i>0)finish();else{Q=null;show('train')}}
+function finish(){clearInterval(window._tm);const n=Q.i+(Q.answered&&!Q.exam?0:0);const asked=Math.max(1,Object.values(Q.perCat).reduce((a,b)=>a+b.t,0));const pct=Math.round(Q.right/asked*100);
+ const rows=Object.entries(Q.perCat).map(([c,v])=>`<tr><td>${c}</td><td>${v.r}/${v.t}</td><td>${Math.round(v.r/v.t*100)} %</td></tr>`).join('');
+ const verdict=pct>=80?'Stark – so packst du das locker. 💪':pct>=60?'Solide. Wiederhole die Fehler und mach noch eine Runde.':'Noch nicht sicher – Spickzettel lesen und den Bereich gezielt üben.';
+ const missed=Q.missed.slice(0,15).map(x=>`<details><summary>${x.q.split('\n')[0].slice(0,80)}</summary><div class="exp">Richtig: <b>${x.correct}</b>${x.e?'\n'+x.e:''}</div></details>`).join('');
+ $('#app').innerHTML=`<div class="card"><h2>${Q.title} – Ergebnis</h2><div class="big">${pct} %</div><p class="mute">${Q.right} von ${asked} richtig</p><p>${verdict}</p>
+ <table><tr><th>Bereich</th><th>Richtig</th><th>Quote</th></tr>${rows}</table>
+ ${missed?`<h3>Deine Fehler – kurz durchgehen</h3>${missed}`:''}
+ <div style="margin-top:12px"><button class="btn" onclick="show('train')">Zurück zum Üben</button>${wrong.length?`<button class="btn sec" onclick="drillWrong()">Fehler wiederholen (${wrong.length})</button>`:''}</div></div>`;Q=null}
+
+// ---------- Modi ----------
+function drillMath(key){startQuiz([],{endless:true,gen:()=>mathQ(key),title:key?MATHKEYS[key]:'Mathe-Mix'})}
+function drillStatic(arr,title){startQuiz(shuffle(arr).map(staticQ),{title})}
+function drillText(){const list=[];TEXTE.forEach(T=>T.qs.forEach(x=>list.push(staticQ(x))));startQuiz(list,{title:'Textanalyse'})}
+function drillWrong(){if(!wrong.length){alertBox('Keine offenen Fehler 🎉');return}startQuiz(shuffle(wrong.map(id=>BANK[id]).filter(Boolean)).map(staticQ),{title:'Fehler wiederholen'})}
+function exam(){const list=[];for(let i=0;i<12;i++)list.push(mathQ());shuffle(SPRACHE).slice(0,10).forEach(x=>list.push(staticQ(x)));shuffle(RECHT).slice(0,6).forEach(x=>list.push(staticQ(x)));const T=pick(TEXTE);T.qs.forEach(x=>list.push(staticQ(x)));shuffle(WISSEN).slice(0,9).forEach(x=>list.push(staticQ(x)));
+ startQuiz(list,{title:'Probetest',minutes:40,exam:true})}
+function alertBox(m){const d=document.createElement('div');d.className='card';d.textContent=m;$('#app').prepend(d);setTimeout(()=>d.remove(),2500)}
+
+// ---------- Views ----------
+const PLAN=[
+ {d:'Tag 1 – Rechnen & Sprache (ca. 5–6 h)',t:[
+  'Spickzettel „Rechnen“ lesen und jede Formel einmal abschreiben (30 min)',
+  'Dreisatz + Dreisatz umgekehrt: je 15 Aufgaben',
+  'Prozentwert, Grundwert, Prozentsatz: je 15 Aufgaben',
+  'Zinsen (Tage + Jahre): je 10 Aufgaben – Taschenrechner benutzen!',
+  'Spickzettel „Sprache“ lesen (das/dass, Kommas, Groß/klein)',
+  'Sprache: alle Fragen 1× durch',
+  'Abends: Allgemeinwissen 1× durch (entspannt)',
+ ]},
+ {d:'Tag 2 – Recht, Text & Aufsatz (ca. 5–6 h)',t:[
+  'Spickzettel „Rechtsfälle“ lesen – Prüfschema verstehen',
+  'Rechtsfälle: alle Fälle durch, jede Erklärung lesen',
+  'Textanalyse: alle Fragen (auf „überwiegend/immer/nie“ achten)',
+  'Mathe-Mix: 30 Aufgaben inkl. Rabatt/MwSt & Einfuhrabgaben',
+  'Spickzettel „Arbeitsprobe“ lesen',
+  'Arbeitsprobe 1 schreiben (45 min Timer) + Checkliste',
+  'Fehler wiederholen',
+ ]},
+ {d:'Tag 3 – Prüfungssimulation (ca. 4–5 h)',t:[
+  'Probetest 1 (40 min, ohne Pause)',
+  'Fehler wiederholen + schwächsten Bereich gezielt üben',
+  'Arbeitsprobe 2 schreiben (anderes Thema)',
+  'Probetest 2 – Ziel: ≥ 80 %',
+  'Allgemeinwissen + Zoll-Fakten nochmal durch',
+  'Tasche packen: Ausweis, Einladung, nicht programmierbarer Taschenrechner, Stifte, Wasser, Snack',
+  'Früh schlafen. Kein Lernen mehr nach 20 Uhr 😴',
+ ]}];
+function vPlan(){const all=PLAN.reduce((a,p)=>a+p.t.length,0),n=Object.values(done).filter(Boolean).length;
+ const st=Object.entries(stats).map(([c,v])=>`<tr><td>${c}</td><td>${v.r}/${v.t}</td><td>${Math.round(v.r/v.t*100)} %</td></tr>`).join('');
+ return`<div class="card"><div class="row"><h2>Dein 3-Tage-Plan</h2><span class="pill">${n}/${all}</span></div><div class="bar"><i style="width:${n/all*100}%"></i></div>
+ <p class="mute" style="margin-top:8px">Der Test dauert laut Zoll bis zu 4 Stunden. Teile: Sprachverständnis, Logik & Zahlen (Grundrechenarten, Dreisatz, Prozent, Zinsen), Textanalyse, Rechtsfälle, Arbeitsprobe, Wissenstest. Nicht programmierbarer Taschenrechner erlaubt.</p></div>
+ ${PLAN.map((p,pi)=>`<div class="card"><h3 style="margin-top:0">${p.d}</h3>${p.t.map((t,ti)=>{const k=pi+'_'+ti;return`<div class="task ${done[k]?'done':''}"><input type="checkbox" id="c${k}" ${done[k]?'checked':''} onchange="tick('${k}',this.checked)"><label for="c${k}">${t}</label></div>`}).join('')}</div>`).join('')}
+ ${st?`<div class="card"><h2>Deine Statistik</h2><table><tr><th>Bereich</th><th>Richtig</th><th>Quote</th></tr>${st}</table><button class="btn sec" style="margin-top:10px" onclick="resetStats()">Statistik zurücksetzen</button></div>`:''}`}
+function tick(k,v){done[k]=v;store.set('done',done);show('plan')}
+function resetStats(){stats={};wrong=[];store.set('stats',stats);store.set('wrong',wrong);show('plan')}
+
+function vLearn(){return`
+<div class="card"><h2>🧮 Rechnen</h2>
+<h3>Dreisatz</h3><ul><li><b>Proportional</b> (mehr → mehr): erst auf 1 teilen, dann malnehmen.<br><span class="f">5 kg = 10 € → 1 kg = 2 € → 8 kg = 16 €</span></li>
+<li><b>Umgekehrt</b> (mehr Leute → weniger Zeit): erst malnehmen, dann teilen.<br><span class="f">4 Leute · 6 h = 24 → 3 Leute: 24 : 3 = 8 h</span></li></ul>
+<h3>Prozent – die 3 Formeln</h3><table><tr><td>Prozentwert</td><td><span class="f">W = G · p / 100</span></td></tr><tr><td>Grundwert</td><td><span class="f">G = W · 100 / p</span></td></tr><tr><td>Prozentsatz</td><td><span class="f">p = W · 100 / G</span></td></tr></table>
+<p class="mute">Trick: „von“ steht vor G. „Wie viel Prozent“ → p gesucht.<br>+19 % → <span class="f">· 1,19</span> · −20 % → <span class="f">· 0,8</span>. Mehrere Änderungen: Faktoren multiplizieren, nicht Prozente addieren.<br>Netto aus Brutto: <span class="f">Brutto : 1,19</span> (nicht −19 %!)</p>
+<h3>Zinsen</h3><table><tr><td>Jahre</td><td><span class="f">Z = K · p · n / 100</span></td></tr><tr><td>Monate</td><td><span class="f">Z = K · p · m / 1200</span></td></tr><tr><td>Tage</td><td><span class="f">Z = K · p · t / 36000</span></td></tr></table>
+<p class="mute">Bankjahr = 360 Tage, Monat = 30 Tage. Kapital gesucht: <span class="f">K = Z · 100 · 360 / (p · t)</span></p>
+<h3>Zoll-Klassiker</h3><p>Einfuhrabgaben (vereinfacht): Zoll = Zollwert · Zollsatz. EUSt = (Zollwert + Zoll) · 19 %.</p>
+<h3>Zahlenreihen</h3><p class="mute">Prüfreihenfolge: Differenzen → Faktoren → abwechselnde Muster → Differenzen der Differenzen.</p></div>
+
+<div class="card"><h2>✍️ Sprache</h2><ul>
+<li><b>das/dass:</b> „dieses/welches“ einsetzbar → <i>das</i>, sonst <i>dass</i>.</li>
+<li><b>seid/seit:</b> ihr seid (Verb) · seit gestern (Zeit).</li>
+<li><b>wider/wieder:</b> wider = gegen · wieder = nochmal.</li>
+<li><b>Großschreibung:</b> beim/zum/das + Verb (beim Lesen) · etwas/nichts/viel + Adjektiv (etwas Neues) · aber <i>am besten</i> klein.</li>
+<li><b>Komma:</b> vor/nach jedem Nebensatz (dass, weil, obwohl, wenn, der/die/das als Relativ). Relativsatz in der Mitte → zwei Kommas. Vor „aber, sondern, doch“ immer Komma.</li>
+<li><b>Genitiv</b> nach wegen, trotz, während, aufgrund, innerhalb.</li>
+<li><b>als/wie:</b> größer <i>als</i> · so groß <i>wie</i>.</li>
+<li>Typische Fallen: endgültig, nämlich, Standard, Rhythmus, Reparatur, Maschine, tolerant, Lizenz, Entschädigung, Interesse, Ergebnis, vielleicht, Paket, Gebühr.</li></ul></div>
+
+<div class="card"><h2>⚖️ Rechtsfälle – Prüfschema</h2>
+<ol><li><b>Frage genau lesen:</b> Was wird gefragt (Ja/Nein? Betrag? Datum?)</li>
+<li><b>Norm zerlegen:</b> Voraussetzungen (Tatbestand) ↔ Folge (Rechtsfolge).</li>
+<li><b>Definitionen</b> zuerst prüfen („im Sinne dieser Vorschrift ist …“).</li>
+<li><b>Jedes Merkmal einzeln</b> mit dem Sachverhalt abgleichen.</li>
+<li><b>Ausnahmen</b> prüfen („gilt nicht“, „abweichend“, „es sei denn“). Spezielle Regel schlägt allgemeine.</li>
+<li><b>Ergebnis</b> mit Rechtsfolge formulieren.</li></ol>
+<table><tr><td><b>und</b></td><td>alle Merkmale nötig</td></tr><tr><td><b>oder</b></td><td>eins reicht</td></tr><tr><td><b>muss / ist zu</b></td><td>Pflicht</td></tr><tr><td><b>soll</b></td><td>Regelfall – Ausnahme nur atypisch</td></tr><tr><td><b>kann / darf</b></td><td>Ermessen</td></tr><tr><td><b>unverzüglich</b></td><td>ohne schuldhaftes Zögern</td></tr><tr><td><b>angefangen</b></td><td>aufrunden</td></tr><tr><td><b>im Übrigen</b></td><td>gilt für alles, was nicht speziell geregelt ist</td></tr></table>
+<p class="mute">Fristen: erst Fristbeginn (Bekanntgabe!) bestimmen, dann Frist addieren. Monatsfrist endet am Tag mit derselben Zahl im Folgemonat.</p></div>
+
+<div class="card"><h2>📄 Textanalyse</h2><ul>
+<li>Erst die Fragen lesen, dann den Text – gezielt suchen.</li>
+<li>Nur werten, was <b>im Text</b> steht, nicht dein Vorwissen.</li>
+<li>Signalwörter: <i>immer, nie, alle, ausschließlich</i> in Antworten sind oft falsch, wenn der Text <i>häufig, überwiegend, kann</i> sagt.</li>
+<li>Wer sagt was? Autor ≠ Kritiker ≠ Befürworter.</li></ul></div>
+
+<div class="card"><h2>📝 Arbeitsprobe (Aufsatz/Stellungnahme)</h2>
+<ol><li><b>Einleitung</b> (3–4 Sätze): Aktueller Anlass/Bedeutung → Fragestellung nennen.</li>
+<li><b>Pro</b>-Argumente: 2–3, jeweils <i>Behauptung → Begründung → Beispiel</i>.</li>
+<li><b>Contra</b>-Argumente: 2–3, gleiche Struktur.</li>
+<li><b>Abwägung & Fazit:</b> Eigene, begründete Position. Evtl. Kompromiss/Ausblick.</li></ol>
+<p>Stärkstes Argument kommt zuletzt in deinem Block. Überleitungen: <i>zudem, darüber hinaus, demgegenüber, allerdings, folglich, insgesamt</i>.</p>
+<p class="mute">10 min gliedern · 30 min schreiben · 5 min Korrektur (Kommas, das/dass, Großschreibung). Rechtschreibung zählt mit! Kurze Sätze = weniger Fehler.</p></div>
+
+<div class="card"><h2>🛃 Zoll-Basics fürs Wissen</h2><ul>
+<li>Zoll gehört zum <b>Bundesministerium der Finanzen</b>; Generalzolldirektion in <b>Bonn</b>; vor Ort: Hauptzollämter.</li>
+<li>Aufgaben: Zölle & EUSt erheben, Verbrauchsteuern (Energie, Strom, Tabak, Alkohol, Kaffee, Schaumwein), Kfz-Steuer, FKS (Schwarzarbeit/Mindestlohn), Verbote & Beschränkungen (Drogen, Waffen, Artenschutz, Produktpiraterie), Vollstreckung.</li>
+<li>Rechtsgrundlage Zoll: <b>Zollkodex der Union</b>; Steuerverfahren: <b>Abgabenordnung</b>. Oberstes Fachgericht: <b>Bundesfinanzhof</b> (München).</li>
+<li>EU-Zollunion: keine Binnenzölle, gemeinsamer Außenzolltarif. Zölle = EU-Eigenmittel.</li></ul></div>`}
+
+function vTrain(){const tiles=Object.entries(MATHKEYS).map(([k,v])=>`<button class="tile" onclick="drillMath('${k}')"><b>${v}</b><span>unbegrenzt</span></button>`).join('');
+ return`<div class="card"><h2>🧮 Rechnen</h2><p class="mute">Zufällige Zahlen – du bekommst nie dieselbe Aufgabe. Taschenrechner nutzen wie in der Prüfung.</p>
+ <button class="btn" onclick="drillMath()">Mathe-Mix starten</button><div class="grid" style="margin-top:10px">${tiles}</div></div>
+ <div class="card"><h2>Andere Bereiche</h2><div class="grid">
+ <button class="tile" onclick="drillStatic(SPRACHE,'Sprache')"><b>✍️ Sprache</b><span>${SPRACHE.length} Fragen</span></button>
+ <button class="tile" onclick="drillStatic(RECHT,'Rechtsfälle')"><b>⚖️ Rechtsfälle</b><span>${RECHT.length} Fälle</span></button>
+ <button class="tile" onclick="drillText()"><b>📄 Textanalyse</b><span>${TEXTE.length} Texte</span></button>
+ <button class="tile" onclick="drillStatic(WISSEN,'Allgemeinwissen')"><b>🌍 Allgemeinwissen</b><span>${WISSEN.length} Fragen</span></button>
+ <button class="tile" onclick="drillWrong()"><b>🔁 Meine Fehler</b><span>${wrong.length} offen</span></button>
+ </div></div>`}
+
+function vExam(){return`<div class="card"><h2>⏱️ Probetest</h2><p>40 Fragen gemischt wie im echten Test, <b>40 Minuten</b>, keine Erklärungen zwischendurch – Auswertung am Ende.</p>
+<ul><li>12 × Rechnen</li><li>10 × Sprache</li><li>6 × Rechtsfälle</li><li>3 × Textanalyse</li><li>9 × Allgemeinwissen</li></ul>
+<p class="mute">Ziel: ≥ 80 %. Tipp: Bei Hängern weiterklicken statt festbeißen – im echten Test zählt jede Minute.</p>
+<button class="btn" onclick="exam()">Probetest starten</button></div>`}
+
+const TOPICS=['Sollte das Bargeld in Deutschland abgeschafft werden?','Wie kann der Staat Schwarzarbeit wirksam bekämpfen?','Homeoffice im öffentlichen Dienst – Chance oder Risiko?','Sollte es ein generelles Tempolimit auf Autobahnen geben?','Soziale Medien: Sollte es eine Altersgrenze von 16 Jahren geben?','Online-Shopping aus Nicht-EU-Ländern: Sollten Kleinsendungen strenger kontrolliert werden?','Sollte ein verpflichtendes soziales Jahr für junge Menschen eingeführt werden?','Künstliche Intelligenz in der Verwaltung – mehr Nutzen oder mehr Gefahr?','Sollte die Wehrpflicht wieder vollständig eingeführt werden?','Sollen Steuern auf ungesunde Lebensmittel (z. B. Zucker) erhoben werden?'];
+let topic=pick(TOPICS),wEnd=null;
+function vWrite(){const draft=store.get('draft','');return`<div class="card"><h2>✍️ Arbeitsprobe üben</h2>
+<p class="mute">Thema:</p><p class="q"><b id="topic">${topic}</b></p><button class="btn sec" onclick="newTopic()">Anderes Thema</button>
+<div class="row" style="margin:10px 0"><button class="btn" onclick="startW()">45-min-Timer starten</button><span class="timer" id="wt">${wEnd?'':'45:00'}</span></div>
+<textarea id="ta" placeholder="Hier schreiben … (Gliederung zuerst!)">${String(draft).replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea>
+<p class="mute" id="wc">0 Wörter · Ziel: 400–600</p></div>
+<div class="card"><h2>Selbstcheck danach</h2>${['Einleitung mit Anlass und klarer Fragestellung','Mindestens 2 Pro- und 2 Contra-Argumente','Jedes Argument: Behauptung → Begründung → Beispiel','Absätze und Überleitungen (zudem, demgegenüber …)','Begründetes eigenes Fazit','Alle Nebensätze mit Komma abgetrennt','das/dass geprüft','Großschreibung von Nomen/Nominalisierungen geprüft','Keine Umgangssprache, keine „ich finde“-Kette'].map((t,i)=>`<div class="task"><input type="checkbox" id="w${i}"><label for="w${i}">${t}</label></div>`).join('')}
+<p class="mute">Profi-Tipp: Lass dir deinen Text danach hier im Chat korrigieren – einfach reinkopieren.</p><button class="btn sec" onclick="copyDraft()">Text kopieren</button></div>`}
+function newTopic(){topic=pick(TOPICS.filter(t=>t!==topic));$('#topic').textContent=topic}
+function startW(){wEnd=Date.now()+45*60000;clearInterval(window._wt);window._wt=setInterval(()=>{const s=Math.max(0,Math.round((wEnd-Date.now())/1000));const el=$('#wt');if(el)el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')+(s===0?' – Zeit um!':'');if(s<=0)clearInterval(window._wt)},500)}
+function copyDraft(){const t=$('#ta').value;try{navigator.clipboard.writeText(t).then(()=>alertBox('Kopiert ✔'),()=>alertBox('Kopieren nicht möglich – Text markieren und kopieren.'))}catch(e){alertBox('Kopieren nicht möglich – Text markieren und kopieren.')}}
+function bindWrite(){const ta=$('#ta');if(!ta)return;const up=()=>{const n=(ta.value.trim().match(/\S+/g)||[]).length;$('#wc').textContent=n+' Wörter · Ziel: 400–600';store.set('draft',ta.value)};ta.oninput=up;up()}
+
+const VIEWS={plan:vPlan,learn:vLearn,train:vTrain,exam:vExam,write:vWrite};
+function show(v){if(Q&&Q.end){clearInterval(window._tm)}Q=null;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));$('#app').innerHTML=VIEWS[v]();if(v==='write')bindWrite();window.scrollTo(0,0);try{if(location.hash!=='#'+v)history.replaceState(null,'','#'+v)}catch(e){}store.set('view',v)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+const h=(location.hash||'').slice(1)||store.get('view','plan');show(VIEWS[h]?h:'plan');
+// Persistenten Speicher anfordern + Offline-Cache (PWA)
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
